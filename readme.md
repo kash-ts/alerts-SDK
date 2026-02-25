@@ -51,9 +51,9 @@ $ yarn add @kash-88/alerts
 **Example:**
 ```js
 /**
- * Note:
- * You can get the CLIENT_ID in https://www.donationalerts.com/application/clients
- * You can find the SCOPE list in https://www.donationalerts.com/apidoc#authorization__scopes
+ * Notes:
+ * - You can get CLIENT_ID at https://www.donationalerts.com/application/clients.
+ * - You can find the list of scopes at https://www.donationalerts.com/apidoc#authorization__scopes.
  */
 
 import { getAuthorizeLink } from "@kash-88/alerts";
@@ -71,8 +71,8 @@ try {
 
 ---
 
-## getOauthToken
-**Purpose:** Exchange authorization code for access_token and refresh_token. **Async**
+## getOauthToken (Async)
+**Purpose:** Exchange authorization code for access_token and refresh_token.
 
 - **Params:**
   - `client_id: string` — Your client (application) ID
@@ -84,20 +84,20 @@ try {
 **Example:**
 ```js
 /**
- * Note:
- * You can get the CLIENT_ID and CLIENT_SERCET (Token) in https://www.donationalerts.com/application/clients
- * USER_CODE is the user token after authorization, use getAuthorizeLink() to get the authorization link.
+ * Notes:
+ * - You can get CLIENT_ID and CLIENT_TOKEN at https://www.donationalerts.com/application/clients.
+ * - USER_CODE is the authorization code returned after the user authorizes your app via the link from getAuthorizeLink().
  */
 
 import { getOauthToken } from "@kash-88/alerts";
 
 const client_id = "CLIENT_ID";
-const client_secret = process.env.CLIENT_SECRET!;
+const client_token = "CLIENT_TOKEN";
 const code = "USER_CODE";
 
 (async () => {
     try {
-        const token = await getOauthToken({ client_id, client_secret, code });
+        const token = await getOauthToken({ client_id, client_token, code });
         console.log("Oauth token:", token);
     } catch (error) {
         console.error("Error:", error.message);
@@ -107,19 +107,19 @@ const code = "USER_CODE";
 
 ---
 
-## getUser
-**Purpose:** Fetch user profile information by access_token. **Async**
+## getUser (Async)
+**Purpose:** Fetch user profile information by access_token.
 
 - **Params:**
-  - `access_token: string` — User's oauth token
+  - `oauth_token: string` — User's oauth token
 - **Endpoint:** https://www.donationalerts.com/api/v1/user/oauth
 - **API Docs:** [User Info](https://www.donationalerts.com/apidoc#api_v1__users)
 
 **Example:**
 ```js
 /**
- * Note:
- * You can get the user OAUTH_TOKEN after the user logs in via getOauthToken(), and then use getOauthToken() to get an oauth token!
+ * Notes:
+ * - You can obtain OAUTH_TOKEN by calling getOauthToken() after the user authorizes your app.
  */
 
 import { getUser } from "@kash-88/alerts";
@@ -138,8 +138,8 @@ const oauth_token = "OAUTH_TOKEN";
 
 ---
 
-## getUserChannel
-**Purpose:** Get user channel by user_id. **Sync**
+## getUserChannel (Sync)
+**Purpose:** Get user channel by user_id for websocket.
 
 - **Params:**
   - `user_id: string` — User ID
@@ -148,6 +148,12 @@ const oauth_token = "OAUTH_TOKEN";
 
 **Example:**
 ```js
+/**
+ * Notes:
+ * - This function is intended to be used together with WebSocket.
+ * - You can get USER_ID using getUser().
+ */
+
 import { getUserChannel } from "@kash-88/alerts";
 
 const user_id = "USER_ID";
@@ -158,30 +164,34 @@ console.log("User channel:", channel);
 
 ---
 
-## updateAccessToken
-**Purpose:** Refresh access_token using refresh_token. **Async**
+## updateAccessToken (Async)
+**Purpose:** Refresh Access token using Refresh token.
 
 - **Params:**
-  - `client_id: string` — Your app's client ID
-  - `client_secret: string` — Your app's client secret
-  - `refresh_token: string` — Refresh token
+  - `client_id: string` — Your client (application) ID
+  - `client_token: string` — Your client (application) token
+  - `refresh_token: string` — User refresh token
 - **Endpoint:** https://www.donationalerts.com/oauth/token
 - **API Docs:** [Refreshing Access Tokens](https://www.donationalerts.com/apidoc#authorization__authorization_code__refreshing_access_tokens)
 
 **Example:**
 ```js
+/**
+ * Notes:
+ * - You can get CLIENT_ID and CLIENT_TOKEN at https://www.donationalerts.com/application/clients.
+ * - You can obtain REFRESH_TOKEN from the response of getOauthToken().
+ */
+
 import "dotenv/config";
 import { getOauthToken } from "@kash-88/alerts";
 
-// Get on https://www.donationalerts.com/application/clients
 const client_id = "YOUR_CLIENT_ID";
-const client_secret = process.env.CLIENT_SECRET!;
-
-const refresh_token = "USER_REFRESH_TOKEN";
+const client_token = "CLIENT_TOKEN";
+const refresh_token = "REFRESH_TOKEN";
 
 (async () => {
     try {
-        const token = await getOauthToken({ client_id, client_secret, refresh_token });
+        const token = await getOauthToken({ client_id, client_token, refresh_token });
         console.log("Oauth token:", token);
     } catch (error) {
         console.error("Error:", error.message);
@@ -203,10 +213,18 @@ const refresh_token = "USER_REFRESH_TOKEN";
 
 **Example:**
 ```js
+/**
+ * Notes:
+ * - This function is intended to be used together with WebSocket.
+ * - You can get USER_CHANNEL using getUserChannel().
+ * - You receive uuidv4_client_id when you establish the WebSocket connection.
+ * - You can obtain the user ACCESS_TOKEN using getOauthToken().
+ */
+
 import { getPrivateToken } from "@kash-88/alerts";
 
-const channel = "USER_CHANNEL"; // Get via getUserChannel
-const uuidv4_client_id = "UUIDv4_CLIENT_ID"; // WebSocket client UUID
+const channel = "USER_CHANNEL";
+const uuidv4_client_id = "UUIDv4_CLIENT_ID";
 const access_token = "USER_ACCESS_TOKEN";
 
 (async () => {
