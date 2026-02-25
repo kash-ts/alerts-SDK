@@ -1,7 +1,7 @@
 {
   "name": "@kash-88/alerts",
-  "version": "1.2.0",
-  "description": "A lightweight library for easy integration with the DonationAlerts API: authorization, token management, and user info in a few lines.",
+  "version": "1.2.3",
+  "description": "A library for seamless integration with the DonationAlerts API. It provides a comprehensive set of tools for authorization, user token management, retrieving account data, and handling various other API interactions.",
   "type": "module",
   "keywords": [
     "DonationAlerts",
@@ -12,9 +12,9 @@
     "registry": "https://npm.pkg.github.com/",
     "access": "public"
   },
-  "homepage": "https://github.com/kash-88/alerts-SDK#readme",
+  "homepage": "https://github.com/kash-ts/alerts-SDK#readme",
   "bugs": {
-    "url": "https://github.com/kash-88/alerts-SDK/issues"
+    "url": "https://github.com/kash-ts/alerts-SDK/issues"
   },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -31,10 +31,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kash-88/alerts-SDK.git"
+    "url": "git+https://github.com/kash-ts/alerts-SDK.git"
   },
   "license": "ISC",
-  "author": "kash.88",
+  "author": "kash-ts",
   "scripts": {
     "publish:github": "npm publish",
     "build": "tsc && tsc-alias",
