@@ -30,12 +30,12 @@ $ yarn add @kash-88/alerts
 ## Available functions (methods)
 | Function                                | Purpose                                                      |
 |-----------------------------------------|--------------------------------------------------------------|
-| [getAuthorizeLink](#getAuthorizeLink)   | Generate OAuth authorization link                            |
-| [getOauthToken](#getOauthToken)         | Exchange code for access_token and refresh_token             |
-| [getUser](#getUser)                     | Fetch user profile by access_token                           |
-| [getUserChannel](#getUserChannel)       | Get user channel by user_id                                  |
-| [updateAccessToken](#updateAccessToken) | Refresh access_token using refresh_token                     |
-| [getPrivateToken](#getPrivateToken)     | Get private token for channel subscription                   |
+| [getAuthorizeLink](#getAuthorizeLink)   | Generate OAuth authorization link.                            |
+| [getOauthToken](#getOauthToken)         | Exchange code for oauth token and refresh_token.             |
+| [getUser](#getUser)                     | Fetch user profile by oauth token.                           |
+| [getUserChannel](#getUserChannel)       | Get user channel by user id.                                  |
+| [updateAccessToken](#updateAccessToken) | Refresh oauth token using refresh token.                     |
+| [getPrivateToken](#getPrivateToken)     | Get private token for channel subscription.                   |
 
 ---
 
@@ -72,11 +72,11 @@ try {
 ---
 
 ## getOauthToken (Async)
-**Purpose:** Exchange authorization code for access_token and refresh_token.
+**Purpose:** Exchange authorization code for Oauth token and Refresh token.
 
 - **Params:**
   - `client_id: string` — Your client (application) ID
-  - `client_secret: string` — Your app client secret
+  - `client_secret: string` — Your client (application) secret
   - `code: string` — User authorization code
 - **Endpoint:** https://www.donationalerts.com/oauth/token
 - **API Docs:** [Getting Access Token](https://www.donationalerts.com/apidoc#authorization__authorization_code__getting_access_token)
@@ -108,10 +108,10 @@ const code = "USER_CODE";
 ---
 
 ## getUser (Async)
-**Purpose:** Fetch user profile information by access_token.
+**Purpose:** Fetch user profile information by Oauth token.
 
 - **Params:**
-  - `oauth_token: string` — User's oauth token
+  - `oauth_token: string` — User oauth token
 - **Endpoint:** https://www.donationalerts.com/api/v1/user/oauth
 - **API Docs:** [User Info](https://www.donationalerts.com/apidoc#api_v1__users)
 
@@ -139,7 +139,7 @@ const oauth_token = "OAUTH_TOKEN";
 ---
 
 ## getUserChannel (Sync)
-**Purpose:** Get user channel by user_id for websocket.
+**Purpose:** Get user channel by user id for websocket.
 
 - **Params:**
   - `user_id: string` — User ID
@@ -182,10 +182,9 @@ console.log("User channel:", channel);
  * - You can obtain REFRESH_TOKEN from the response of getOauthToken().
  */
 
-import "dotenv/config";
 import { getOauthToken } from "@kash-88/alerts";
 
-const client_id = "YOUR_CLIENT_ID";
+const client_id = "CLIENT_ID";
 const client_token = "CLIENT_TOKEN";
 const refresh_token = "REFRESH_TOKEN";
 
@@ -202,12 +201,12 @@ const refresh_token = "REFRESH_TOKEN";
 ---
 
 ## getPrivateToken (Async)
-**Purpose:** Get a private token for subscribing to a DonationAlerts channel via Centrifuge.
+**Purpose:** Get a Private token for subscribing to a DonationAlerts channel via Centrifuge.
 
 - **Params:**
-  - `channel: string` — Channel name to subscribe
-  - `uuidv4_client_id: string` — UUID v4 client ID (used in WebSocket connection)
-  - `access_token: string` — User's OAuth access token
+  - `channel: string` — User channel
+  - `uuidv4_client_id: string` — UUID v4 client ID
+  - `oauth_token: string` — User OAuth token
 - **Endpoint:** https://www.donationalerts.com/api/v1/centrifuge/subscribe
 - **API Docs:** —
 
@@ -218,18 +217,18 @@ const refresh_token = "REFRESH_TOKEN";
  * - This function is intended to be used together with WebSocket.
  * - You can get USER_CHANNEL using getUserChannel().
  * - You receive uuidv4_client_id when you establish the WebSocket connection.
- * - You can obtain the user ACCESS_TOKEN using getOauthToken().
+ * - You can obtain the user OAUTH_TOKEN using getOauthToken().
  */
 
 import { getPrivateToken } from "@kash-88/alerts";
 
 const channel = "USER_CHANNEL";
 const uuidv4_client_id = "UUIDv4_CLIENT_ID";
-const access_token = "USER_ACCESS_TOKEN";
+const oauth_token = "OAUTH_TOKEN";
 
 (async () => {
     try {
-        const token = await getPrivateToken({ channel, uuidv4_client_id, access_token });
+        const token = await getPrivateToken({ channel, uuidv4_client_id, oauth_token });
         console.log("Private token:", token);
     } catch (error) {
         console.error("Error getting private token:", error.message);
