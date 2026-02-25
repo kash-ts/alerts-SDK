@@ -26,13 +26,13 @@ import { validateDataObject } from "@utils";
  * @param {Object} params - Parameters for getting the token.
  * @param {string} params.channel - Channel name to subscribe.
  * @param {string} params.uuidv4_client_id - UUID v4 client ID.
- * @param {string} params.access_token - OAuth access token of the user.
+ * @param {string} params.oauth_token - OAuth access token of the user.
  * @returns {Promise<string>} - Token for channel subscription.
  */
 
 export async function getPrivateToken(data: GetPrivateToken): Promise<string> {
   try {
-    validateDataObject(data, ["channel", "uuidv4_client_id", "access_token"]);
+    validateDataObject(data, ["channel", "uuidv4_client_id", "oauth_token"]);
 
     const response = await axios.post(
       "https://www.donationalerts.com/api/v1/centrifuge/subscribe",
