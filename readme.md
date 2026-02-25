@@ -1,4 +1,7 @@
-[![Donation Alerts Logo](./readme/donationAlerts.png)]()
+<div align="center">
+    <img src="./readme/donationAlerts.png" alt="Donation Alerts Logo" width="400">
+</div>
+
 <div align="center">
 
 # DonationAlerts SDK
