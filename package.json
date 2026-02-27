@@ -1,7 +1,7 @@
 {
   "name": "@kash-88/alerts",
-  "version": "1.2.0",
-  "description": "A lightweight library for easy integration with the DonationAlerts API: authorization, token management, and user info in a few lines.",
+  "version": "1.2.3",
+  "description": "A library for seamless integration with the DonationAlerts API. It provides a comprehensive set of tools for authorization, user token management, retrieving account data, and handling various other API interactions.",
   "type": "module",
   "keywords": [
     "DonationAlerts",
@@ -12,9 +12,9 @@
     "registry": "https://npm.pkg.github.com/",
     "access": "public"
   },
-  "homepage": "https://github.com/kash-88/alerts-SDK#readme",
+  "homepage": "https://github.com/kash-ts/alerts-SDK#readme",
   "bugs": {
-    "url": "https://github.com/kash-88/alerts-SDK/issues"
+    "url": "https://github.com/kash-ts/alerts-SDK/issues"
   },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -31,11 +31,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kash-88/alerts-SDK.git"
+    "url": "git+https://github.com/kash-ts/alerts-SDK.git"
   },
   "license": "ISC",
-  "author": "kash.88",
+  "author": "kash-ts",
   "scripts": {
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "publish:github": "npm publish",
     "build": "tsc && tsc-alias",
     "prepublishOnly": "npm run build",
@@ -49,11 +50,15 @@
     "ws": "^8.17.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.12.12",
     "@types/ws": "^8.5.10",
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.3"
   }
 }
