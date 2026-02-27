@@ -11,7 +11,7 @@
       "@ws/*": ["./src/ws/*"],
       "@type": ["./src/types.js"],
       "@utils": ["./src/utils.js"],
-      "@function/*": ["./src/func/*"],
+      "@function/*": ["./src/function/*"],
       "@kash-88/alerts": ["./src/index.js"]
     },
 
