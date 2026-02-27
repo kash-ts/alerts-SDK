@@ -1,20 +1,15 @@
-// TODO Сделать инструкцию для создания акка и приложения
-
-<div align="center">
-    <img src="./readme/donationAlerts.png" alt="Donation Alerts Logo" width="400">
-</div>
-
 <div align="center">
 
-# DonationAlerts SDK
-A library for seamless integration with the DonationAlerts API. It provides a comprehensive set of tools for authorization, user token management, retrieving account data, and handling various other API interactions.
+# DonationAlerts API
+A lightweight library for easy integration with the DonationAlerts API: authorization, token management, and user info in a few lines.
 
-[![npm version](https://img.shields.io/npm/v/@kash-88/alerts.svg?style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts)
-[![npm downloads](https://img.shields.io/npm/dm/@kash-88/alerts.svg?style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts)
-[![install size](https://img.shields.io/badge/dynamic/json?url=https://packagephobia.com/v2/api.json?p=@kash-88/alerts&query=$.install.pretty&label=install%20size&style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts)
-[![GitHub User's stars](https://img.shields.io/github/stars/kash-ts)](https://github.com/kash-ts)
+[![npm version](https://img.shields.io/npm/v/@kash-88/alerts.svg?style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts/v/latest)
+[![npm downloads](https://img.shields.io/npm/dm/@kash-88/alerts.svg?style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts/v/latests)
+[![install size](https://img.shields.io/badge/dynamic/json?url=https://packagephobia.com/v2/api.json?p=@kash-88/alerts&query=$.install.pretty&label=install%20size&style=flat-square)](https://www.npmjs.com/package/@kash-88/alerts/v/latest)
 
 </div>
+
+Available in: [RU](https://github.com/kash-88/alerts-SDK/blob/main/readme-ru.md), **EN**
 
 ## Installation
 Using npm:
@@ -29,15 +24,27 @@ Using yarn:
 $ yarn add @kash-88/alerts
 ```
 
-## Available functions (methods)
-| Function                                | Purpose                                          |
-|-----------------------------------------|--------------------------------------------------|
-| [getAuthorizeLink](#getAuthorizeLink)   | Generate OAuth authorization link.               |
-| [getOauthToken](#getOauthToken)         | Exchange code for oauth token and refresh_token. |
-| [getPrivateToken](#getPrivateToken)     | Get private token for channel subscription.      |
-| [getUser](#getUser)                     | Fetch user profile by oauth token.               |
-| [getUserChannel](#getUserChannel)       | Get user channel by id.                          |
-| [updateAccessToken](#updateAccessToken) | Refresh oauth token using refresh token.         |
+Using pnpm:
+
+```bash
+$ pnpm add @kash-88/alerts
+```
+
+Using bun:
+
+```bash
+$ bun add @kash-88/alerts
+```
+
+## Available Methods (Quick Overview)
+| Function            | Purpose                                                      |
+|---------------------|--------------------------------------------------------------|
+| getAuthorizeLink    | Generate OAuth authorization link                            |
+| getOauthToken       | Exchange code for access_token and refresh_token             |
+| getUser             | Fetch user profile by access_token                           |
+| getUserChannel      | Get user channel by user_id                                  |
+| updateAccessToken   | Refresh access_token using refresh_token                     |
+| getPrivateToken     | Get private token for channel subscription                   |
 
 ---
 
@@ -45,26 +52,20 @@ $ yarn add @kash-88/alerts
 **Purpose:** Generate OAuth authorization link for DonationAlerts.
 
 - **Params:**
-  - `client_id: string` — Your client (application) ID
-  - `scopes: string[]` — Array of access scopes
+  - `client_id: string` — Your app"s client ID
+  - `scope: string[]` — Array of access scopes
 - **Endpoint:** https://www.donationalerts.com/oauth/authorize
 - **API Docs:** [Authorization Request](https://www.donationalerts.com/apidoc#authorization__authorization_code__authorization_request)
 
 **Example:**
 ```js
-/**
- * Notes:
- * - You can get CLIENT_ID at https://www.donationalerts.com/application/clients.
- * - You can find the list of scopes at https://www.donationalerts.com/apidoc#authorization__scopes.
- */
-
 import { getAuthorizeLink } from "@kash-88/alerts";
 
-const client_id = "CLIENT_ID";
-const scopes = ["oauth-user-show"];
+const client_id = "YOUR_CLIENT_ID"; // Get on https://www.donationalerts.com/application/clients
+const scope = ["oauth-user-show"];
 
 try {
-    const link = getAuthorizeLink(client_id, scopes);
+    const link = getAuthorizeLink({ client_id, scope });
     console.log("Authorize link:", link);
 } catch (error) {
     console.error("Error:", error.message);
@@ -74,32 +75,27 @@ try {
 ---
 
 ## getOauthToken (Async)
-**Purpose:** Exchange Authorization code for OAuth token and Refresh token.
+**Purpose:** Exchange authorization code for access_token and refresh_token.
 
 - **Params:**
-  - `client_id: string` — Your client (application) ID
-  - `client_token: string` — Your client (application) token
-  - `code: string` — User authorization code
+  - `client_id: string` — Your app's client ID
+  - `client_secret: string` — Your app's client secret
+  - `code: string` — Authorization code
 - **Endpoint:** https://www.donationalerts.com/oauth/token
 - **API Docs:** [Getting Access Token](https://www.donationalerts.com/apidoc#authorization__authorization_code__getting_access_token)
 
 **Example:**
 ```js
-/**
- * Notes:
- * - You can get CLIENT_ID and CLIENT_TOKEN at https://www.donationalerts.com/application/clients.
- * - USER_CODE is the authorization code returned after the user authorizes your app via the link from getAuthorizeLink().
- */
-
 import { getOauthToken } from "@kash-88/alerts";
 
-const client_id = "CLIENT_ID";
-const client_token = "CLIENT_TOKEN";
+// Get on https://www.donationalerts.com/application/clients
+const client_id = "YOUR_CLIENT_ID";
+const client_secret = process.env.CLIENT_SECRET!;
 const code = "USER_CODE";
 
 (async () => {
     try {
-        const token = await getOauthToken(client_id, client_token, code);
+        const token = await getOauthToken({ client_id, client_secret, code });
         console.log("Oauth token:", token);
     } catch (error) {
         console.error("Error:", error.message);
@@ -109,66 +105,23 @@ const code = "USER_CODE";
 
 ---
 
-## getPrivateToken (Async)
-**Purpose:** Get a Private token for subscribing to a DonationAlerts channel via Centrifuge.
-
-- **Params:**
-  - `channel: string` — User channel
-  - `uuidv4_client_id: string` — UUID v4 client ID
-  - `oauth_token: string` — User OAuth token
-- **Endpoint:** https://www.donationalerts.com/api/v1/centrifuge/subscribe
-- **API Docs:** —
-
-**Example:**
-```js
-/**
- * Notes:
- * - This function is intended to be used together with WebSocket.
- * - You can get USER_CHANNEL using getUserChannel().
- * - You receive uuidv4_client_id when you establish the WebSocket connection.
- * - You can obtain the user OAUTH_TOKEN using getOauthToken().
- */
-
-import { getPrivateToken } from "@kash-88/alerts";
-
-const channel = "USER_CHANNEL";
-const uuidv4_client_id = "UUIDv4_CLIENT_ID";
-const oauth_token = "OAUTH_TOKEN";
-
-(async () => {
-    try {
-        const token = await getPrivateToken(channel, uuidv4_client_id, oauth_token);
-        console.log("Private token:", token);
-    } catch (error) {
-        console.error("Error getting private token:", error.message);
-    }
-})();
-```
-
----
-
 ## getUser (Async)
-**Purpose:** Fetch user profile information by OAuth token.
+**Purpose:** Fetch user profile information by access_token.
 
 - **Params:**
-  - `oauth_token: string` — User oauth token
+  - `access_token: string` — User's access token
 - **Endpoint:** https://www.donationalerts.com/api/v1/user/oauth
 - **API Docs:** [User Info](https://www.donationalerts.com/apidoc#api_v1__users)
 
 **Example:**
 ```js
-/**
- * Notes:
- * - You can obtain OAUTH_TOKEN by calling getOauthToken() after the user authorizes your app.
- */
-
 import { getUser } from "@kash-88/alerts";
 
-const oauth_token = "OAUTH_TOKEN";
+const user_access_token = "USER_ACCESS_TOKEN";
 
 (async () => {
     try {
-        const user = await getUser(oauth_token);
+        const user = await getUser(user_access_token);
         console.log("User data:", user);
     } catch (error) {
         console.error("Error:", error.message);
@@ -179,7 +132,7 @@ const oauth_token = "OAUTH_TOKEN";
 ---
 
 ## getUserChannel (Sync)
-**Purpose:** Get user channel by user id for WebSocket.
+**Purpose:** Get user channel by user_id.
 
 - **Params:**
   - `user_id: string` — User ID
@@ -188,12 +141,6 @@ const oauth_token = "OAUTH_TOKEN";
 
 **Example:**
 ```js
-/**
- * Notes:
- * - This function is intended to be used together with WebSocket.
- * - You can get USER_ID using getUser().
- */
-
 import { getUserChannel } from "@kash-88/alerts";
 
 const user_id = "USER_ID";
@@ -205,35 +152,61 @@ console.log("User channel:", channel);
 ---
 
 ## updateAccessToken (Async)
-**Purpose:** Refresh Access token using Refresh token.
+**Purpose:** Refresh access_token using refresh_token.
 
 - **Params:**
-  - `client_id: string` — Your client (application) ID
-  - `client_token: string` — Your client (application) token
-  - `refresh_token: string` — User refresh token
+  - `client_id: string` — Your app's client ID
+  - `client_secret: string` — Your app's client secret
+  - `refresh_token: string` — Refresh token
 - **Endpoint:** https://www.donationalerts.com/oauth/token
 - **API Docs:** [Refreshing Access Tokens](https://www.donationalerts.com/apidoc#authorization__authorization_code__refreshing_access_tokens)
 
 **Example:**
 ```js
-/**
- * Notes:
- * - You can get CLIENT_ID and CLIENT_TOKEN at https://www.donationalerts.com/application/clients.
- * - You can obtain REFRESH_TOKEN from the response of getOauthToken().
- */
-
+import "dotenv/config";
 import { getOauthToken } from "@kash-88/alerts";
 
-const client_id = "CLIENT_ID";
-const client_token = "CLIENT_TOKEN";
-const refresh_token = "REFRESH_TOKEN";
+// Get on https://www.donationalerts.com/application/clients
+const client_id = "YOUR_CLIENT_ID";
+const client_secret = process.env.CLIENT_SECRET!;
+
+const refresh_token = "USER_REFRESH_TOKEN";
 
 (async () => {
     try {
-        const token = await getOauthToken(client_id, client_token, refresh_token);
+        const token = await getOauthToken({ client_id, client_secret, refresh_token });
         console.log("Oauth token:", token);
     } catch (error) {
         console.error("Error:", error.message);
     }
 })();
 ```
+
+---
+
+## getPrivateToken (Async)
+**Purpose:** Get a private token for subscribing to a DonationAlerts channel via Centrifuge.
+
+- **Params:**
+  - `channel: string` — Channel name to subscribe
+  - `uuidv4_client_id: string` — UUID v4 client ID (used in WebSocket connection)
+  - `access_token: string` — User's OAuth access token
+- **Endpoint:** https://www.donationalerts.com/api/v1/centrifuge/subscribe
+- **API Docs:** —
+
+**Example:**
+```js
+import { getPrivateToken } from "@kash-88/alerts";
+
+const channel = "USER_CHANNEL"; // Get via getUserChannel
+const uuidv4_client_id = "UUIDv4_CLIENT_ID"; // WebSocket client UUID
+const access_token = "USER_ACCESS_TOKEN";
+
+(async () => {
+    try {
+        const token = await getPrivateToken({ channel, uuidv4_client_id, access_token });
+        console.log("Private token:", token);
+    } catch (error) {
+        console.error("Error getting private token:", error.message);
+    }
+})();
