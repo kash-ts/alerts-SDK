@@ -5,12 +5,12 @@ import axios from "axios";
  *
  * @param {string} channel - User channel
  * @param {string} uuidv4_client_id - UUID v4 client ID
- * @param {string} oauth_token - User OAuth token
+ * @param {string} access_token - User OAuth token
  * 
  * @returns {Promise<string>} - Token for channel subscription.
  */
 
-export async function getPrivateToken(channel:string, uuidv4_client_id:string, oauth_token:string): Promise<string> {
+export async function getPrivateToken(channel:string, uuidv4_client_id:string, access_token:string): Promise<string> {
   try {
     const response = await axios.post(
       "https://www.donationalerts.com/api/v1/centrifuge/subscribe",
@@ -20,7 +20,7 @@ export async function getPrivateToken(channel:string, uuidv4_client_id:string, o
       },
       {
         headers: {
-          "Authorization": `Bearer ${oauth_token}`
+          "Authorization": `Bearer ${access_token}`
         }
       }
     );

@@ -13,7 +13,7 @@ interface CentrifugeConfiguration {
 interface WSClientOptions {
     channel: string;
     socket_connection_token: string;
-    access_token: string;
+    oauth_token: string;
 }
 
 interface CentrifugeMessage {
@@ -73,13 +73,13 @@ export default class CentrifugeClient extends (EventEmitter as new () => TypedEm
         this.sendMessage(JSON.stringify(message));
     }
 
-    public async connectPrivateToken(channel: string, uuidv4_client_id: string, access_token: string = this.options.access_token): Promise<void> {
+    public async connectPrivateToken(channel: string, uuidv4_client_id: string, oauth_token: string = this.options.oauth_token): Promise<void> {
         try {
-            const token = await getPrivateToken({
+            const token = await getPrivateToken(
                 channel,
                 uuidv4_client_id,
-                access_token
-            });
+                oauth_token
+            );
 
             const subscribeMessage: CentrifugeMessage = {
                 params: {

@@ -1,9 +1,11 @@
 export interface OauthToken {
     token_type: string;
-    expires_in: number;
     access_token: string;
     refresh_token: string;
+    expires_in: number;
 }
+
+//
 
 export interface GetPrivateToken {
     channel: string;
@@ -27,12 +29,12 @@ export interface GetAuthorizeLinkData {
 
 export interface GetOauthData {
     client_id: string | number;
-    client_secret: string;
+    client_token: string;
     code: string;
 }
 
 export interface UpdateTokenData {
     client_id: string | number;
-    client_secret: string;
+    client_token: string;
     refresh_token: string;
 } 
