@@ -40,9 +40,9 @@
     "publish:github": "npm publish",
     "build": "tsc && tsc-alias",
     "prepublishOnly": "npm run build",
-    "publish:npm-laster": "npm publish --registry=https://registry.npmjs.org/ --tag latest",
-    "publish:npm-dev": "npm publish --registry=https://registry.npmjs.org/ --tag Dev",
-    "publish:npm-beta": "npm publish --registry=https://registry.npmjs.org/ --tag Beta"
+    "publish:npm-latest": "npm publish --@kash-88:registry=https://registry.npmjs.org/ --tag latest",
+    "publish:npm-dev": "npm publish --@kash-88:registry=https://registry.npmjs.org/ --tag dev",
+    "publish:npm-beta": "npm publish --@kash-88:registry=https://registry.npmjs.org/ --tag beta"
   },
   "dependencies": {
     "axios": "^1.10.0",
@@ -55,6 +55,7 @@
     "@types/ws": "^8.5.10",
     "cross-env": "^10.1.0",
     "jest": "^30.2.0",
+    "readline-sync": "^1.4.10",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
