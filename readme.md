@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./readme/donationAlerts.png" alt="Donation Alerts Logo" width="400">
+    <a href="https://www.donationalerts.com/apidoc"><img src="./readme/donationAlerts.png" alt="Donation Alerts Logo" width="400"></a>
 </div>
 
 <div align="center">
@@ -157,16 +157,16 @@ const oauth_token = "OAUTH_TOKEN";
 ```js
 /**
  * Notes:
- * - You can obtain OAUTH_TOKEN by calling getOauthToken() after the user authorizes your app.
+ * - You can obtain ACCESS_TOKEN by calling getOauthToken() after the user authorizes your app.
  */
 
 import { getUser } from "@kash-88/alerts";
 
-const oauth_token = "OAUTH_TOKEN";
+const access_token = "ACCESS_TOKEN";
 
 (async () => {
     try {
-        const user = await getUser(oauth_token);
+        const user = await getUser(access_token);
         console.log("User data:", user);
     } catch (error) {
         console.error("Error:", error.message);
@@ -220,7 +220,7 @@ console.log("User channel:", channel);
  * - You can obtain REFRESH_TOKEN from the response of getOauthToken().
  */
 
-import { getOauthToken } from "@kash-88/alerts";
+import { updateAccessToken } from "@kash-88/alerts";
 
 const client_id = "CLIENT_ID";
 const client_token = "CLIENT_TOKEN";
@@ -228,7 +228,7 @@ const refresh_token = "REFRESH_TOKEN";
 
 (async () => {
     try {
-        const token = await getOauthToken(client_id, client_token, refresh_token);
+        const token = await updateAccessToken(client_id, client_token, refresh_token);
         console.log("Oauth token:", token);
     } catch (error) {
         console.error("Error:", error.message);
