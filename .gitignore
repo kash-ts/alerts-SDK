@@ -18,3 +18,5 @@ package-lock.json
 
 .env
 dist
+
+test.ts
