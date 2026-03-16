@@ -16,7 +16,9 @@ jspm_packages/
 .yarn-integrity
 package-lock.json
 
-.env
+.github/
+.example/
+*.env
 dist
 
 test.ts
