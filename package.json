@@ -33,7 +33,7 @@
     "type": "git",
     "url": "git+https://github.com/kash-ts/alerts-SDK.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "kash-ts",
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
