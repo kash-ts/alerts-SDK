@@ -1,46 +1,35 @@
 import "dotenv/config";
 
-import { getUser, getUserChannel, CentrifugeClient } from "@kash-88/alerts";
+import { WebServer } from "@kash-88/alerts";
 
-const oauth_token = process.env.ACCESS_TOKEN!;
-let isConnectToPrivate = false;
+const access_token = process.env.ACCESS_TOKEN!;
 
 async function main() {
     try {
-        const user = await getUser(oauth_token);
-        const channel = getUserChannel(user.id);
-        const socket_connection_token = String(process.env.SOCKET_CONNECTION_TOKEN);
-
-        const client = new CentrifugeClient({
-            channel,
-            socket_connection_token,
-            oauth_token
+        const client = new WebServer({
+            access_token,
+            autoReconnect: true
         });
 
-        const ws = client.createConnection();
-
-        ws.on("open", async () => {
+        client.on("open", async () => {
             console.log("WebSocket соединение открыто");
-            client.confirmConnection(socket_connection_token);
+            await client.authorization();
         });
 
-        ws.on("message", (message) => {
-            const srt = message.toString("utf8");
-            const json = JSON.parse(srt);
-
-            if(json.id = 1 && !isConnectToPrivate) {
-                isConnectToPrivate = true; return client.connectPrivateToken(channel, json.result.client);
-            }
-
-            console.log(srt);
+        client.on("message", (message) => {
+            console.log("Получено сообщение:", JSON.stringify(message));
         });
 
-        ws.on("close", () => {
-            console.log("WebSocket соединение закрыто");
+        client.on("close", (code, reason) => {
+            console.log(`WebSocket соединение закрыто: ${code} ${reason}`);
         });
 
-        ws.on("error", (err) => {
+        client.on("error", (err) => {
             console.error("Ошибка WebSocket:", err);
+        });
+
+        client.on("reconnect", () => {
+            console.log("Переподключение...");
         });
     } catch (error: any) {
         console.error("Ошибка:", error.message);

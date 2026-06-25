@@ -19,6 +19,5 @@ package-lock.json
 .github/
 .example/
 *.env
-dist
 
 test.ts
