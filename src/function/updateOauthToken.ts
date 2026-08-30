@@ -1,24 +1,24 @@
 import axios from "axios";
-import { OAuthToken } from "@type";
+import { OAuthToken, OAuthScope } from "@type";
 import { formatAxiosError } from "@utils";
 
 /**
- * Exchange Authorization code for OAuth token and Refresh token.
+ * Refresh Access token using Refresh token.
  * 
  * @param {string} client_id - Your client (application) ID
  * @param {string} client_secret - Your client (application) secret
- * @param {string} redirect_uri - The URL where users will be sent after authorization
- * @param {string} code - User authorization code
+ * @param {string} refresh_token - User refresh token
+ * @param {OAuthScope[]} scopes - Array of access scopes
  * 
- * @returns {Promise<OAuthToken>} OAuth user token
- * @see {@link https://github.com/kash-ts/alerts-SDK?tab=readme-ov-file#getOauthToken}
+ * @returns {Promise<OAuthToken>} A promise that resolves to the new token data from the API.
+ * @see {@link https://www.donationalerts.com/apidoc#authorization__authorization_code__getting_access_token}
  */
 
-export default async function getOauthToken(
+export default async function updateOauthToken(
     client_id: string,
     client_secret: string,
-    redirect_uri: string,
-    code: string
+    refresh_token: string,
+    scopes: OAuthScope[]
 ): Promise<OAuthToken> {
     if (!client_id || typeof client_id !== "string") {
         throw new Error("client_id must be a non-empty string");
@@ -26,20 +26,20 @@ export default async function getOauthToken(
     if (!client_secret || typeof client_secret !== "string") {
         throw new Error("client_secret must be a non-empty string");
     }
-    if (!redirect_uri || typeof redirect_uri !== "string") {
-        throw new Error("redirect_uri must be a non-empty string");
+    if (!refresh_token || typeof refresh_token !== "string") {
+        throw new Error("refresh_token must be a non-empty string");
     }
-    if (!code || typeof code !== "string") {
-        throw new Error("code must be a non-empty string");
+    if (!Array.isArray(scopes) || scopes.length === 0) {
+        throw new Error("scopes must be a non-empty array");
     }
 
     try {
         const formData = new URLSearchParams();
-        formData.append("grant_type", "authorization_code");
+        formData.append("grant_type", "refresh_token");
+        formData.append("refresh_token", refresh_token);
         formData.append("client_id", client_id);
         formData.append("client_secret", client_secret);
-        formData.append("redirect_uri", redirect_uri);
-        formData.append("code", code);
+        formData.append("scope", Array.from(new Set(scopes)).join(" "));
 
         const response = await axios.post<OAuthToken>("https://www.donationalerts.com/oauth/token", formData, {
             headers: {

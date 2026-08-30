@@ -3,24 +3,35 @@
     "target": "ES2020",
     "module": "ES2020",
     "moduleResolution": "node",
-    "lib": ["ES2020"],
+    "lib": [
+      "ES2020"
+    ],
     "outDir": "./dist",
     "rootDir": "./",
     "baseUrl": ".",
     "paths": {
-      "@ws/*": ["./src/ws/*"],
-      "@type": ["./src/types.js"],
-      "@utils": ["./src/utils.js"],
-      "@function/*": ["./src/function/*"],
-      "@kash-88/alerts": ["./src/index.js"]
+      "@ws/*": [
+        "./src/WebSocket/*"
+      ],
+      "@type": [
+        "./src/Types/index.ts"
+      ],
+      "@utils": [
+        "./src/utils.ts"
+      ],
+      "@function/*": [
+        "./src/Function/*"
+      ],
+      "@kash-88/alerts": [
+        "./src/index.ts"
+      ]
     },
-
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": true,
+    "declaration": true
   },
   "include": [
     "src/**/*"
@@ -29,4 +40,4 @@
     "node_modules",
     "src/example"
   ]
-} 
+}
