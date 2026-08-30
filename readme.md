@@ -1,5 +1,5 @@
 <div align="center">
-    <a href="https://www.donationalerts.com/apidoc"><img src="./readme/donationAlerts.png" alt="Donation Alerts Logo" width="400"></a>
+    <a href="https://www.donationalerts.com/apidoc"><img src="https://www.donationalerts.com/img/brand/donationalerts.svg" alt="DonationAlerts Combo logo" width="400"></a>
 </div>
 
 <div align="center">
