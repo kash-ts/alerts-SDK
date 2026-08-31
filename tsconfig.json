@@ -10,7 +10,7 @@
     "rootDir": "./",
     "baseUrl": ".",
     "paths": {
-      "@ws/*": [
+      "@websocket/*": [
         "./src/WebSocket/*"
       ],
       "@type": [
@@ -22,9 +22,6 @@
       "@function/*": [
         "./src/Function/*"
       ],
-      "@kash-88/alerts": [
-        "./src/index.ts"
-      ]
     },
     "strict": true,
     "noImplicitAny": true,
