@@ -1,5 +1,5 @@
-import { CustomAlerts } from "@type";
 import axios from "axios";
+import { CustomAlerts } from "@type";
 import { formatAxiosError } from "@utils";
 
 /**

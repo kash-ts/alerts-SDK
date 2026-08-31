@@ -7,15 +7,14 @@ import getPrivateToken from "@function/getPrivateToken.js";
 import getDonationsAlerts from "@function/getDonationsAlerts.js";
 import getExternal from "@function/getExternal.js";
 import createCustomAlerts from "@function/createCustomAlerts.js";
-import generateSignature from "@function/generateSignature.js";
 import createMerchandise from "@function/createMerchandise.js";
 import updateMerchandise from "@function/updateMerchandise.js";
 import updateOrCreateMerchandise from "@function/updateOrCreateMerchandise.js";
 import getUserDataFromPromocode from "@function/getUserDataFromPromocode.js";
 import sendSaleAlert from "@function/sendSaleAlert.js";
 
-import WebServer from "@ws/CentrifugeClient.js";
-import { OAuthScope } from "@type";
+import WebServer from "@websocket/CentrifugoClient.js";
+import { ChannelType, OAuthScope } from "@type";
 
 export {
     getAuthorizeLink,
@@ -27,12 +26,12 @@ export {
     getPrivateToken,
     getDonationsAlerts,
     createCustomAlerts,
-    generateSignature,
     createMerchandise,
     updateMerchandise,
     updateOrCreateMerchandise,
     getUserDataFromPromocode,
     sendSaleAlert,
     WebServer,
+    ChannelType,
     OAuthScope
 }; 

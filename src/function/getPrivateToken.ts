@@ -1,37 +1,41 @@
 import axios from "axios";
 import { formatAxiosError } from "@utils";
 
+interface ChannelToken {
+  channel: string;
+  token: string;
+}
+
 /**
- * Get a Private token for subscribing to a DonationAlerts channel via Centrifuge.
+ * Get private tokens for subscribing to DonationAlerts channels via Centrifugo.
  *
- * @param {string} channel - User channel
+ * @param {string[]} channels - Array of channel names to subscribe to
  * @param {string} client - Centrifugo UUIDv4 client ID
  * @param {string} access_token - User OAuth token
- * 
- * @returns {Promise<string>} - Token for channel subscription.
+ *
+ * @returns {Promise<ChannelToken[]>} - Array of channel and token pairs.
  */
 
 export default async function getPrivateToken(
-  channel: string,
+  channels: string[],
   client: string,
   access_token: string
-): Promise<string> {
-  if (!channel || typeof channel !== "string") {
-    throw new Error("channel must be a non-empty string");
+): Promise<ChannelToken[]> {
+  if (!Array.isArray(channels) || channels.length === 0) {
+    throw new Error("channels must be a non-empty array");
   }
-  if (!client || typeof client !== "string") {
-    throw new Error("client must be a non-empty string");
+  const uuidv4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!client || !uuidv4Regex.test(client)) {
+    throw new Error("client must be a valid UUIDv4");
   }
   if (!access_token || typeof access_token !== "string") {
     throw new Error("access_token must be a non-empty string");
   }
 
   try {
-    const response = await axios.post("https://www.donationalerts.com/api/v1/centrifuge/subscribe",
-      {
-        channels: [channel],
-        client: client
-      },
+    const response = await axios.post(
+      "https://www.donationalerts.com/api/v1/centrifuge/subscribe",
+      { channels, client },
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -40,10 +44,14 @@ export default async function getPrivateToken(
       }
     );
 
-    if (!response.data?.channels?.[0]?.token) {
-      throw new Error("Failed to get private token: no channels in response");
+    if (!Array.isArray(response.data?.channels) || response.data.channels.length === 0) {
+      throw new Error("Failed to get private tokens: no channels in response");
     }
-    return response.data.channels[0].token;
+
+    return response.data.channels.map((c: { channel: string; token: string }) => ({
+      channel: c.channel,
+      token: c.token
+    }));
   } catch (error: any) {
     throw new Error(formatAxiosError(error));
   }

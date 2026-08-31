@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Merchandise } from "@type";
-import generateSignature from "@function/generateSignature.js";
-import { formatAxiosError } from "@utils";
+import { formatAxiosError, generateSignature } from "@utils";
 
 /**
  * Update or create a merchandise by merchant and merchandise identifiers.

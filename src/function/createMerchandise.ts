@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Merchandise } from "@type";
-import generateSignature from "@function/generateSignature.js";
-import { formatAxiosError } from "@utils";
+import { formatAxiosError, generateSignature } from "@utils";
 
 /**
  * Create a new merchandise.
@@ -79,8 +78,7 @@ export default async function createMerchandise(
         if (img_url) params.img_url = img_url;
         if (end_at_ts !== undefined) params.end_at_ts = end_at_ts;
 
-        const signature = generateSignature(params, client_secret);
-        params.signature = signature;
+        params.signature = generateSignature(params, client_secret);
 
         const formData = new URLSearchParams();
         for (const [key, value] of Object.entries(params)) {

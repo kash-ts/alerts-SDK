@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Merchandise } from "@type";
-import generateSignature from "@function/generateSignature.js";
-import { formatAxiosError } from "@utils";
+import { formatAxiosError, generateSignature } from "@utils";
 
 /**
  * Update an existing merchandise by its DonationAlerts ID.
@@ -27,6 +26,8 @@ export default async function updateMerchandise(
     access_token: string,
     client_secret: string,
     merchandise_id: number,
+    merchant_identifier: string,
+    merchandise_identifier: string,
     title: Record<string, string>,
     currency: string,
     price_user: number,
@@ -46,6 +47,12 @@ export default async function updateMerchandise(
     if (typeof merchandise_id !== "number" || merchandise_id <= 0) {
         throw new Error("merchandise_id must be a positive number");
     }
+    if (!merchant_identifier || typeof merchant_identifier !== "string") {
+        throw new Error("merchant_identifier must be a non-empty string");
+    }
+    if (!merchandise_identifier || typeof merchandise_identifier !== "string") {
+        throw new Error("merchandise_identifier must be a non-empty string");
+    }
     if (!title || Object.keys(title).length === 0) {
         throw new Error("title must be a non-empty object");
     }
@@ -58,6 +65,8 @@ export default async function updateMerchandise(
 
     try {
         const params: Record<string, string | number> = {
+            merchant_identifier,
+            merchandise_identifier,
             currency,
             price_user,
             price_service,
