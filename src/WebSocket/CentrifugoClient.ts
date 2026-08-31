@@ -1,7 +1,7 @@
 import getPrivateToken from "@function/getPrivateToken.js";
 import getUser from "@function/getUser.js";
 import getUserChannel from "@function/getUserChannel.js";
-import { User } from "@type";
+import { User, ChannelType } from "@type";
 import { formatAxiosError } from "@utils";
 import { WebSocket, RawData } from "ws";
 import { EventEmitter } from "events";
@@ -22,7 +22,7 @@ type MessageEvents = {
 }
 
 /**
- * Class for interacting with Centrifuge donationalerts
+ * Class for interacting with Centrifugo donationalerts
  *
  * @param {WSClientOptions} options - Connection options
  * @param {string} options.access_token - User access token
@@ -30,7 +30,7 @@ type MessageEvents = {
  * @param {boolean} [options.autoReconnect=false] - Automatically reconnect on connection close
  */
 
-export default class CentrifugeClient extends (EventEmitter as new () => TypedEmitter<MessageEvents>) {
+export default class CentrifugoClient extends (EventEmitter as new () => TypedEmitter<MessageEvents>) {
     private WebSocket: WebSocket | null;
     private user: User | null;
     private userPromise: Promise<User> | null;
@@ -93,7 +93,7 @@ export default class CentrifugeClient extends (EventEmitter as new () => TypedEm
 
         if (this.channels.length > 0) return this.channels;
 
-        return [getUserChannel(this.user.id)];
+        return [getUserChannel(this.user.id, ChannelType.Donation)];
     }
 
     /**
@@ -193,22 +193,14 @@ export default class CentrifugeClient extends (EventEmitter as new () => TypedEm
                     }
 
                     const channels = await this.getChannels();
+                    const channelTokens = await getPrivateToken(channels, json.result.client, this.access_token);
 
-                    for (let i = 0; i < channels.length; i++) {
-                        const channel = channels[i];
-                        const privateToken = await getPrivateToken(
-                            channel,
-                            json.result.client,
-                            this.access_token
-                        );
-
+                    for (let i = 0; i < channelTokens.length; i++) {
+                        const { channel, token } = channelTokens[i];
                         this.sendMessage(JSON.stringify({
                             id: 2 + i,
                             method: 1,
-                            params: {
-                                channel,
-                                token: privateToken
-                            }
+                            params: { channel, token }
                         }));
                     }
 
